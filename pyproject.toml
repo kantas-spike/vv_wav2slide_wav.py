@@ -6,6 +6,7 @@ authors = ["kanta <101532773+kantas-spike@users.noreply.github.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
+pydub = "^0.25.1"
 
 [tool.poetry.dev-dependencies]
 black = "^22.6.0"
