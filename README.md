@@ -4,8 +4,10 @@
 
 ## 使い方
 
+プロジェクトをチェックアウトしたディレクトリに移動後に、以下を実行します。
+
 ~~~shell
-python3 vv_wav2slide_wav.py INPUT_VV_WAVS_DIR  OUTPUT_WAVS_FOR_SLIDES_DIR
+poetry run python3 vv_wav2slide_wav.py INPUT_VV_WAVS_DIR  OUTPUT_WAVS_FOR_SLIDES_DIR
 ~~~
 
 ## 説明
