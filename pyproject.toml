@@ -7,6 +7,7 @@ authors = ["kanta <101532773+kantas-spike@users.noreply.github.com>"]
 [tool.poetry.dependencies]
 python = "^3.10"
 pydub = "^0.25.1"
+toml = "^0.10.2"
 
 [tool.poetry.dev-dependencies]
 black = "^22.6.0"
@@ -23,3 +24,9 @@ lint = "flake8 --extend-ignore=E203 --max-line-length=119"
 
 [tool.black]
 line-length = 119
+
+[vv_wav2slide_wav]
+delimiter_regex = '.*_@@+([^@]+).wav\Z'
+slide_start_no = 1
+blank_line_time_ms = 1600
+interline_time_ms = 800
