@@ -11,7 +11,10 @@ DEFAULT_BLANK_LINE_TIME_MS = 1600
 DEFAULT_INTERLINE_TIME_MS = 800
 
 
-def get_settings(toml_file="pyproject.toml"):
+def get_settings(toml_file=None):
+    if toml_file is None:
+        toml_file = os.path.join(os.path.dirname(__file__), "pyproject.toml")
+
     return toml.load(toml_file).get(
         "vv_wav2slide_wav",
         {
