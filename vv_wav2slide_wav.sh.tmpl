@@ -1,0 +1,15 @@
+#!/bin/sh
+
+SCRIPT_HOME_DIR=@@@SCRIPT_HOME_DIR@@@
+
+if [ $# -ne 2 ]; then
+    echo "ERROR: Please specify two arguments."  1>&2
+    echo ""  1>&2
+    echo "USAGE: ~/bin/vv_wav2slide_wav.sh INPUT_DIR OUTPUT_DIR" 1>&2
+    exit 1
+fi
+
+INPUT_DIR=`python -c "import sys; import os; print(os.path.abspath(os.path.expanduser(sys.argv[1])))" $1`
+OUTPUT_DIR=`python -c "import sys; import os; print(os.path.abspath(os.path.expanduser(sys.argv[1])))" $2`
+
+(cd ${SCRIPT_HOME_DIR} && poetry run python3 ~/spike/20_vv_wav2slide_wav/vv_wav2slide_wav.py $INPUT_DIR $OUTPUT_DIR)
