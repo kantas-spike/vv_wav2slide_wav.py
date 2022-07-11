@@ -10,6 +10,12 @@
 poetry run python3 vv_wav2slide_wav.py INPUT_VV_WAVS_DIR  OUTPUT_WAVS_FOR_SLIDES_DIR
 ~~~
 
+もしくは、`vv_wav2slide_wav.sh` をインストール後に、以下を実行します。
+
+~~~shell
+~/bin/vv_wav2slide_wav.sh INPUT_VV_WAVS_DIR  OUTPUT_WAVS_FOR_SLIDES_DIR
+~~~
+
 ## 説明
 
 VOICEVOXは、音声原稿の各行を `[何行目]_[キャラ名]_[テキスト冒頭].wav` という名前で音声ファイルに書き出します。
@@ -102,3 +108,20 @@ interline_time_ms = 800
 |slide_start_no| 1 | 結合したファイル名の先頭に設定する`[スライド番号]`の開始番号|
 |blank_line_time_ms| 1600 |空行の音声ファイルを結合するときに無音にする時間 [単位:ms]|
 |interline_time_ms| 800 |音声ファイル間に挿入する無音の時間 [単位:ms]|
+
+## 呼び出し用シェルスクリプトのインストール
+
+`vv_wav2slide_wav.py`を呼び出す場合、ディレクトリの移動が必要など、実行するまでの作業が煩雑なため、
+呼び出し用のシェルスクリプト `vv_wav2slide_wav.sh` を用意しています。
+
+以下を実行してインストールしてください。デフォルトでは`~/bin`にインストールされます。
+
+~~~shell
+make install
+~~~
+
+インストール後は、以下で実行できるようになります。
+
+~~~shell
+~/bin/vv_wav2slide_wav.sh INPUT_VV_WAVS_DIR  OUTPUT_WAVS_FOR_SLIDES_DIR
+~~~
