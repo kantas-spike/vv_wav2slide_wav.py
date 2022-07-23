@@ -12,4 +12,4 @@ fi
 INPUT_DIR=`python3 -c "import sys; import os; print(os.path.abspath(os.path.expanduser(sys.argv[1])))" $1`
 OUTPUT_DIR=`python3 -c "import sys; import os; print(os.path.abspath(os.path.expanduser(sys.argv[1])))" $2`
 
-(cd ${SCRIPT_HOME_DIR} && poetry run python3 ~/spike/20_vv_wav2slide_wav/vv_wav2slide_wav.py $INPUT_DIR $OUTPUT_DIR)
+(cd ${SCRIPT_HOME_DIR} && poetry run python3 vv_wav2slide_wav.py $INPUT_DIR $OUTPUT_DIR)
