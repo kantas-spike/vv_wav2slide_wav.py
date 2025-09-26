@@ -1,8 +1,10 @@
+import argparse
 import glob
 import os
-import sys
 import re
-import toml
+import sys
+import tomllib
+
 from pydub import AudioSegment
 
 DEFAULT_DELIMITER_REGEX = r".*_@@+([^@]+).wav\Z"
@@ -11,19 +13,25 @@ DEFAULT_BLANK_LINE_TIME_MS = 1600
 DEFAULT_INTERLINE_TIME_MS = 800
 
 
-def get_settings(toml_file=None):
-    if toml_file is None:
-        toml_file = os.path.join(os.path.dirname(__file__), "pyproject.toml")
+def get_config_path():
+    return os.path.join(os.path.dirname(__file__), "config", "vv-wav2slide-wav.toml")
 
-    return toml.load(toml_file).get(
-        "vv_wav2slide_wav",
-        {
-            "delimiter_regex": DEFAULT_DELIMITER_REGEX,
-            "slide_start_no": DEFAULT_SLIDE_START_NO,
-            "blank_line_time_ms": DEFAULT_BLANK_LINE_TIME_MS,
-            "interline_time_ms": DEFAULT_INTERLINE_TIME_MS,
-        },
-    )
+
+def get_settings(toml_path):
+    if toml_path is None:
+        toml_path = os.path.join(os.path.dirname(__file__), "pyproject.toml")
+
+    with open(toml_path, "rb") as f:
+        data = tomllib.load(f)
+        return data.get(
+            "vv_wav2slide_wav",
+            {
+                "delimiter_regex": DEFAULT_DELIMITER_REGEX,
+                "slide_start_no": DEFAULT_SLIDE_START_NO,
+                "blank_line_time_ms": DEFAULT_BLANK_LINE_TIME_MS,
+                "interline_time_ms": DEFAULT_INTERLINE_TIME_MS,
+            },
+        )
 
 
 def show_usage():
@@ -75,24 +83,56 @@ def combine_audio_file(wavs, desc, no, output_dir, blank_line_time, interline_ti
     empty_audio.export(output_path, format="wav")
 
 
+def parse_args():
+    parser = argparse.ArgumentParser(
+        prog="vv_wav2slide_wav",
+        description="voicevoxで生成した行ごとの音声ファイルを、スライド単位の音声ファイルに変換します。",
+    )
+    parser.add_argument(
+        "voicevox_wavs_dir",
+        help="voicevoxで生成した音声ファイル格納ディレクトリ",
+        metavar="INPUT_DIR",
+        type=os.path.abspath,
+    )
+    parser.add_argument(
+        "slide_wavs_dir",
+        help="スライド単位にまとめた音声ファイルの出力先ディレクトリ",
+        metavar="OUTPUT_DIR",
+        type=os.path.abspath,
+    )
+    default_config_path = get_config_path()
+    parser.add_argument(
+        "--config",
+        help=f"設定ファイルのパス。デフォルト値: {default_config_path}",
+        metavar="CONFIG_PATH",
+        default=default_config_path,
+    )
+    args = parser.parse_args()
+
+    if not os.path.isdir(args.voicevox_wavs_dir):
+        print(
+            f"""INPUT_DIRに存在しないディレクトリが指定されました。
+ディレクトリを確認してください: {args.voicevox_wavs_dir}\n"""
+        )
+        parser.print_help()
+        sys.exit(-1)
+
+    if not os.path.isfile(args.config):
+        print(f"存在しない設定ファイルが指定されました: {args.config}\n")
+        parser.print_help()
+        sys.exit(-1)
+
+    return args
+
+
 def main():
-    if len(sys.argv) < 3:
-        print("VOICEVOXの音声ファイルを格納したディレクトリと音声ファイル出力するディレクトリを指定してください。")
-        print("")
-        show_usage()
-        sys.exit(1)
+    args = parse_args()
 
-    input_dir = os.path.abspath(os.path.expanduser(sys.argv[1]))
-    output_dir = os.path.abspath(os.path.expanduser(sys.argv[2]))
+    input_dir = args.voicevox_wavs_dir
+    output_dir = args.slide_wavs_dir
 
-    if not os.path.exists(input_dir):
-        print(f"VOICEVOXの音声ファイルを格納したディレクトリが存在しません: {input_dir}")
-        print("ディレクトリのパスに誤りがないか確認してください。")
-        print("")
-        show_usage()
-        sys.exit(1)
+    settings = get_settings(args.config)
 
-    settings = get_settings()
     groups = get_slide_groups(input_dir, settings["delimiter_regex"])
 
     no = settings["slide_start_no"]
@@ -100,9 +140,11 @@ def main():
     interline_time = settings["interline_time_ms"]
 
     for g in groups:
-        combine_audio_file(g["wavs"], g["desc"], no, output_dir, blank_line_time, interline_time)
+        combine_audio_file(
+            g["wavs"], g["desc"], no, output_dir, blank_line_time, interline_time
+        )
         no += 1
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
