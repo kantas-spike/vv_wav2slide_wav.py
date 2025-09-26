@@ -1,2 +1,4 @@
-poetry.lock
-vv_wav2slide_wav.sh
+__pycache__/
+.python-version
+
+.venv
