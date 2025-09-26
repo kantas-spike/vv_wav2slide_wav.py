@@ -1,6 +1,6 @@
 [project]
 name = "vv-wav2slide-wav"
-version = "0.1.0"
+version = "0.2.0"
 description = "OICEVOXで生成した音声ファイルを、スライド資料用にスライド単位にグループ化した音声ファイルに変換します。"
 readme = "README.md"
 authors = [
