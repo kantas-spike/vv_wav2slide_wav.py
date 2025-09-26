@@ -1,32 +1,25 @@
-[tool.poetry]
-name = "20_vv_wav2slide_wav"
+[project]
+name = "vv-wav2slide-wav"
 version = "0.1.0"
-description = "VOICEVOXで生成した音声ファイルを、スライド資料用にスライド単位にグループ化した音声ファイルに変換します。"
-authors = ["kanta <101532773+kantas-spike@users.noreply.github.com>"]
+description = "OICEVOXで生成した音声ファイルを、スライド資料用にスライド単位にグループ化した音声ファイルに変換します。"
+readme = "README.md"
+authors = [
+    { name = "kanta", email = "101532773+kantas-spike@users.noreply.github.com" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "pydub>=0.25.1",
+]
 
-[tool.poetry.dependencies]
-python = "^3.10"
-pydub = "^0.25.1"
-toml = "^0.10.2"
-
-[tool.poetry.dev-dependencies]
-black = "^22.6.0"
-flake8 = "^4.0.1"
-taskipy = "^1.10.2"
+[project.scripts]
+vv-wav2slide-wav = "vv_wav2slide_wav:main"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["uv_build>=0.8.17,<0.9.0"]
+build-backend = "uv_build"
 
-[tool.taskipy.tasks]
-format = "black *.py"
-lint = "flake8 --extend-ignore=E203 --max-line-length=119"
-
-[tool.black]
-line-length = 119
-
-[vv_wav2slide_wav]
-delimiter_regex = '.*_@@+([^@]+).wav\Z'
-slide_start_no = 1
-blank_line_time_ms = 1600
-interline_time_ms = 800
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+    "ruff>=0.13.2",
+]
