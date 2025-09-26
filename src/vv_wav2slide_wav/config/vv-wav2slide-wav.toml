@@ -1,0 +1,5 @@
+[vv_wav2slide_wav]
+delimiter_regex = '.*_@@+([^@]+).wav\Z'
+slide_start_no = 1
+blank_line_time_ms = 1600
+interline_time_ms = 800
